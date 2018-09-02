@@ -1,0 +1,147 @@
+package bankingSystem;
+
+import java.util.Scanner;
+
+//making a class name bank which have method of bank
+class Bank {
+	Scanner input = new Scanner(System.in);
+	public static String accno;
+	public static String name;
+	public static long balance;
+
+	void openAccount() {
+		System.out.print("Enter account no of customer: ");
+		accno = input.next();
+		System.out.print("Enter name of customer : ");
+		name = input.next();
+		System.out.print("Enter balance: ");
+		balance = input.nextLong();
+	}
+
+	void deposit() {
+		System.out.print("Enter the amount");
+		long amount = input.nextLong();
+		balance = balance + amount;
+	}
+
+	void withdrawal() {
+		// use Exception try and catch keyword
+		try {
+			System.out.println("Enter amount balance for withdraw : ");
+			long amt = input.nextLong();
+			// condition is low balance 2000
+			if (amt < balance - 2000) {
+				balance = balance - amt;
+			} else {
+				balance = balance / 0;// we divide by 0 that is IO exception
+			}
+
+		} catch (Exception e) {
+			System.out.println("Low balance in our account");
+			System.out.println("Transaction Failed..");
+
+		}
+	}
+
+	void showAccount() {
+		System.out.println(accno + "  " + name + "   " + balance);
+	}
+
+	// finding account is in list or not
+
+	boolean search(String acn) {
+		// string compare method use
+		if (accno.equals(acn)) {
+			showAccount();
+			return (true);
+		}
+		return (false);
+	}
+}
+
+// main class Saving Bank
+
+public class savingBank {
+
+	public static void main(String arg[]) {
+
+		System.out.println("Welcome to  Saving Banking System \n");
+		Scanner input = new Scanner(System.in);
+
+		System.out.print("Enter the total number of customer: ");
+		int n = input.nextInt();
+		Bank banklist[] = new Bank[n];
+		for (int i = 0; i < banklist.length; i++) {
+			banklist[i] = new Bank();
+			banklist[i].openAccount();
+		}
+
+		int ch;
+		do {
+			System.out.println("\n1.Show all bank customer details\n" + "2.Search by account number\n"
+					+ "3.Deposit amount\n" + "4.Withdrawal amount\n" + "5.Exit");
+			System.out.println("Enter your  choice :");
+			ch = input.nextInt();
+			switch (ch) {
+			case 1:
+				for (int i = 0; i < banklist.length; i++) {
+					banklist[i].showAccount();
+				}
+				break;
+
+			case 2:
+				System.out.print("Enter account no you want to search : ");
+				String acn = input.next();
+				boolean found = false;
+				for (int i = 0; i < banklist.length; i++) {
+					found = banklist[i].search(acn);
+					if (found) {
+						break;
+					}
+				}
+				if (!found) {
+					System.out.println("Account not exist in list.");
+				}
+				break;
+
+			case 3:
+				System.out.print("Enter Account No : ");
+				acn = input.next();
+				found = false;
+				for (int i = 0; i < banklist.length; i++) {
+					found = banklist[i].search(acn);
+					if (found) {
+						banklist[i].deposit();
+						break;
+					}
+				}
+				if (!found) {
+					System.out.println("Account not exist in list ..");
+				}
+				break;
+
+			case 4:
+				System.out.print("Enter account no : ");
+				acn = input.next();
+				found = false;
+				for (int i = 0; i < banklist.length; i++) {
+					found = banklist[i].search(acn);
+					if (found) {
+						banklist[i].withdrawal();
+						break;
+					}
+				}
+				if (!found) {
+					System.out.println("Account not exist in the list.");
+				}
+				break;
+			case 5:
+				System.out.println("Good bye... Thanks using.... ");
+				break;
+			}
+
+		} while (ch != 5);
+
+	}
+
+}
